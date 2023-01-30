@@ -1,24 +1,29 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
+import MyBar from './MyBar';
+import MyCard from './MyCard';
 import './App.css';
 
+
 function App() {
+  const [data, setData] =useState([])
+  useEffect(() => {
+    fetch("https://www.mecallapi.com/api/attractions/")
+      .then(res => res.json())
+      .then((result) => {
+        console.log(result);
+        setData(result)});
+
+  },[])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MyBar />
+      <h1 style={{paddingLeft: "10px"}}>Attractions</h1>
+      <div className="grid-container">
+        {data.map(item =>(
+          <MyCard  key{item.id} name={item.name} coverimage={item.coverimage} detail={item.detail}/>
+        ))}      
+      </div>
+    </>
   );
 }
 
